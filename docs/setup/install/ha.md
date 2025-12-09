@@ -40,9 +40,6 @@ graph TB
     C1 & C2 & C3 --> LB
     LB --> HS1 & HS2 & HS3
     HS1 & HS2 & HS3 --> DB
-    
-    style LB fill:#f9f,stroke:#333,stroke-width:2px
-    style DB fill:#bbf,stroke:#333,stroke-width:2px
 ```
 
 ### Key Components
@@ -155,10 +152,6 @@ graph TB
     PAT --> PG_REPLICA2
     PG_PRIMARY -.Replication.-> PG_REPLICA1
     PG_PRIMARY -.Replication.-> PG_REPLICA2
-    
-    style PG_PRIMARY fill:#9f9,stroke:#333,stroke-width:2px
-    style PG_REPLICA1 fill:#cfc,stroke:#333,stroke-width:2px
-    style PG_REPLICA2 fill:#cfc,stroke:#333,stroke-width:2px
 ```
 
 **Cloud-Managed Options:**
@@ -639,10 +632,6 @@ graph TB
     HS1 --> PG_PRIMARY
     HS2 --> PG_PRIMARY
     PG_PRIMARY -.Streaming Replication.-> PG_STANDBY
-    
-    style LB fill:#f9f,stroke:#333,stroke-width:2px
-    style PG_PRIMARY fill:#9f9,stroke:#333,stroke-width:2px
-    style PG_STANDBY fill:#cfc,stroke:#333,stroke-width:2px
 ```
 
 **Characteristics:**
@@ -693,9 +682,6 @@ graph TB
     
     PG_PRIMARY -.Replication.-> PG_REPLICA1
     PG_PRIMARY -.Replication.-> PG_REPLICA2
-    
-    style DNS fill:#faa,stroke:#333,stroke-width:2px
-    style PG_PRIMARY fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
 **Characteristics:**
@@ -742,9 +728,6 @@ graph TB
     POD1 & POD2 & POD3 --> SECRET
     POD1 & POD2 & POD3 --> PG_SVC
     PG_SVC --> PG_STATEFULSET
-    
-    style INGRESS fill:#f9f,stroke:#333,stroke-width:2px
-    style PG_STATEFULSET fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
 **Kubernetes Deployment Example:**
@@ -780,6 +763,19 @@ data:
         max_idle_conns: 10
         conn_max_idle_time_secs: 3600
         ssl: false  # Internal cluster communication
+    
+    # DERP configuration - use external DERP servers for HA
+    derp:
+      server:
+        enabled: false  # IMPORTANT: Do not enable embedded DERP in HA setups
+      urls:
+        - https://controlplane.tailscale.com/derpmap/default
+      auto_update_enabled: true
+      update_frequency: 3h
+    
+    # Use database mode for ACL policies in HA
+    policy:
+      mode: database
     
     # ... rest of configuration
 
